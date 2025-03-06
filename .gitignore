@@ -2,3 +2,4 @@ data/
 processed/
 raw/
 __pycache__/
+venv/
