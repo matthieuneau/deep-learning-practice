@@ -61,6 +61,8 @@ def graph_to_image(
         assert conv2d.kernel_size[0] == conv2d.kernel_size[1] == 3, "Expected kernel size of 3x3."
         assert conv2d.stride[0] == conv2d.stride[1] == 1, "Expected stride of 1."
 
+    raise NotImplementedError
+
 
 class Conv2dMessagePassing(torch_geometric.nn.MessagePassing):
     """
