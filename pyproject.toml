@@ -17,7 +17,8 @@ dependencies = [
     "nbconvert (>=7.16.6,<8.0.0)",
     "torchviz (>=0.0.3,<0.0.4)",
     "jupyterlab (>=4.3.5,<5.0.0)",
-    "torchvision (>=0.21.0,<0.22.0)"
+    "torchvision (>=0.21.0,<0.22.0)",
+    "torchmetrics (>=1.6.2,<2.0.0)"
 ]
 
 
