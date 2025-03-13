@@ -3,14 +3,24 @@ import torch.nn as nn
 
 
 class ConvLora(nn.Module):
-    def __init__(self, in_channels, out_channels, frozen_weights, r=2):
+    def __init__(self, frozen_conv, r=2, alpha=2):
         super().__init__()
-        self.downConv = nn.Conv2d(in_channels, r, kernel_size=3, padding=1, stride=1)
-        self.upConv = nn.Conv2d(r, out_channels, kernel_size=1, padding=0, stride=1)
-        self.frozen_weights = frozen_weights
-        
-    def float(self, x):
-        main_x = self.frozen_weights(x) 
+        self.alpha = alpha
+        self.r = r
+        self.downConv = nn.Conv2d(
+            frozen_conv.in_channels,
+            r,
+            frozen_conv.kernel_size,
+            frozen_conv.stride,
+            frozen_conv.padding,
+        )
+        self.upConv = nn.Conv2d(
+            r, frozen_conv.out_channels, kernel_size=1, padding=0, stride=1
+        )
+        self.frozen_conv = frozen_conv
+
+    def forward(self, x):
+        main_x = self.frozen_conv(x)
         lora_x = self.downConv(x)
         lora_x = self.upConv(lora_x)
-        return main_x + lora_x
+        return main_x + (self.alpha / self.r) * lora_x
