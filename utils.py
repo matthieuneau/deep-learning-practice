@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision import models
+from tqdm import tqdm
 
 
 def precompute_features(
@@ -61,7 +62,7 @@ def train(model, train_dataloader, test_dataloader, loss_fn, optimizer, n_epochs
     test_loss_history = []
     accuracy_history = []
 
-    for i in range(n_epochs):
+    for i in tqdm(range(n_epochs)):
         model.train()
         train_loss = 0
         test_loss = 0
