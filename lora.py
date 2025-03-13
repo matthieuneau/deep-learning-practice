@@ -46,8 +46,11 @@ def build_lora_resnet(module, r=2, alpha=10):
 def train_lora(
     pretrained_model,
     lora_model,
-    train_dataloader,
-    test_dataloader,
+    frozen_test_dataset,
+    frozen_train_dataset,
+    lora_test_dataset,
+    lora_train_dataset,
+    batch_size,
     loss_fn,
     optimizer,
     n_epochs,
@@ -61,9 +64,12 @@ def train_lora(
         train_loss = 0
         test_loss = 0
         correct = 0
-        for features, targets in train_dataloader:
+        for j in range(len(lora_train_dataset) // batch_size):
             optimizer.zero_grad()
-            y_pred = lora_model(features) + pretrained_model(features)
+            indices = torch.randperm(batch_size)
+            batch = torch.stack(lora_train_dataset[indices][:, 0], dim=0)
+            targets = torch.cat(lora_train_dataset[indices][:, 0], dim=0)
+            y_pred = lora_model(batch) + frozen_train_dataset[indices][:, 0]
             loss = loss_fn(y_pred, targets)
             loss.backward()
             train_loss += loss.item()
@@ -71,11 +77,12 @@ def train_lora(
 
         with torch.no_grad():
             lora_model.eval()
-            for features, targets in test_dataloader:
-                y_pred = lora_model(features) + pretrained_model(features)
-                loss = loss_fn(y_pred, targets)
-                test_loss += loss.item()
-                correct += (torch.argmax(y_pred, dim=1) == targets).sum()
+            batch = torch.stack(lora_test_dataset[:, 0], dim=0)
+            targets = torch.cat(lora_test_dataset[:, 1], dim=0)
+            y_pred = lora_model(features) + frozen_train_dataset[indices][:, 0]
+            loss = loss_fn(y_pred, targets)
+            test_loss += loss.item()
+            correct += (torch.argmax(y_pred, dim=1) == targets).sum()
 
         accuracy = correct / len(test_dataloader.dataset)
 
@@ -89,3 +96,7 @@ def train_lora(
             )
 
     return train_loss_history, test_loss_history, accuracy_history
+
+
+if __name__ == "__main__":
+    train_lora()
