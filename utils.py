@@ -1,7 +1,7 @@
-import torch.nn.functional as F
+import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision import models
-import torch
 
 
 def precompute_features(
@@ -40,8 +40,18 @@ def precompute_features(
     data, targets = next(iter(dataloader))
     features = model(data)
 
-    one_hot_targets = F.one_hot(targets.long(), num_classes=2).to(torch.float)
+    # one_hot_targets = F.one_hot(targets.long(), num_classes=2).to(torch.float)
 
-    features_dataset = TensorDataset(features.detach().clone(), one_hot_targets.detach().clone())   # FREE THE GRADIENTS before returning the dataset
+    features_dataset = TensorDataset(features.detach().clone(), targets.detach().clone())   # FREE THE GRADIENTS before returning the dataset
 
     return features_dataset
+
+
+#TODO: Fix
+class LastLayer(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear = nn.Linear(512, 2)
+    
+    def forward(self, x):
+        return self.linear(x)
