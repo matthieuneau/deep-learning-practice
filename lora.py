@@ -90,5 +90,63 @@ def train_lora(
     return train_loss_history, test_loss_history, accuracy_history
 
 
-if __name__ == "__main__":
-    train_lora()
+def merge_lora_conv(
+    downconv: nn.Conv2d,
+    upconv: nn.Conv2d,
+    Cin: int,
+    Cout: int,
+    padding: int,
+    stride: int,
+    kernel_size: int,
+) -> nn.Conv2d:
+    """
+    Merge two convolutions into a single convolution. The second
+    Args:
+        downconv: The first convolution (r x Cin x kernel_size x kernel_size)
+        upconv: The second convolution (Cout x r x 1 x 1)
+        Cin: Number of input channels
+        Cout: Number of output channels
+        padding: Padding of the downConv which is the same as the Conv in the pre-lora resnet
+        stride: stride of the downConv which is the same as the Conv in the pre-lora resnet
+        r: Rank of the factorized convolution
+        kernel_size: Size of the convolution kernel
+    """
+    merged_conv = nn.Conv2d(
+        Cin, Cout, kernel_size=kernel_size, padding=padding, stride=stride, bias=False
+    )
+
+    with torch.no_grad():
+        # Merge weights via einsum (conv2 is 1x1, so weight[:, :, 0, 0] is our channel-mixing matrix)
+        # shape of conv1.weight: (r, Cin, kH, kW)
+        # shape of conv2.weight: (Cout, r, 1, 1) -> can be viewed as (Cout, r)
+        merged_conv.weight.copy_(
+            torch.einsum("or,rchw->ochw", upconv.weight[:, :, 0, 0], downconv.weight)
+        )
+
+    return merged_conv
+
+
+def inflate_lora(lora_resnet):
+    for name, child in lora_resnet.named_children():
+        if isinstance(child, ConvLora):
+            layer = merge_lora_conv(
+                child.downConv,
+                child.upConv,
+                child.downConv.in_channels,
+                child.upConv.out_channels,
+                child.downConv.padding,
+                child.downConv.stride,
+                child.downConv.kernel_size[0],
+            )
+            setattr(lora_resnet, name, layer)
+        else:
+            inflate_lora(child)
+
+
+def merge_models(resnet1, resnet2):
+    """resnet1 += resnet2"""
+    for child1, child2 in zip(resnet1.children(), resnet2.children()):
+        if isinstance(child1, nn.Conv2d):
+            child1.weight.data += child2.weight.data.clone()
+        else:
+            merge_models(child1, child2)
