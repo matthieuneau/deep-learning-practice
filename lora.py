@@ -70,6 +70,7 @@ def train_lora(
             optimizer.step()
 
         with torch.no_grad():
+            lora_model.eval()
             for features, targets in test_dataloader:
                 y_pred = lora_model(features) + pretrained_model(features)
                 loss = loss_fn(y_pred, targets)
