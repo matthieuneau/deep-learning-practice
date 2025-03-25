@@ -1,0 +1,10 @@
+100%|██████████| 30/30 [00:20<00:00,  1.45it/s]
+Epoch 1, train loss: 0.6283, test loss: 2.4699, accuracy: 0.5000
+Epoch 6, train loss: 0.3386, test loss: 2.8334, accuracy: 0.5000
+Epoch 11, train loss: 0.2200, test loss: 2.1653, accuracy: 0.5000
+Epoch 16, train loss: 0.1673, test loss: 0.7641, accuracy: 0.5000
+Epoch 21, train loss: 0.1431, test loss: 0.7067, accuracy: 0.5238
+Epoch 26, train loss: 0.1284, test loss: 0.9237, accuracy: 0.5000
+True
+False
+5dc3a68c-e34e-4080-9c3e-2a532b2ccb4d6.29.55dc3a68c-e34e-4080-9c3e-2a532b2ccb4d

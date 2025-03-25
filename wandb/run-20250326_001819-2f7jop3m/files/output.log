@@ -1,0 +1,38 @@
+100%|██████████| 20/20 [00:14<00:00,  1.40it/s]
+Epoch 1, train loss: 0.6637, test loss: 2.0789, accuracy: 0.5000
+Epoch 6, train loss: 0.2753, test loss: 0.9743, accuracy: 0.5000
+Epoch 11, train loss: 0.2528, test loss: 1.2261, accuracy: 0.5000
+Epoch 16, train loss: 0.2155, test loss: 1.2788, accuracy: 0.5000
+True
+False
+100%|██████████| 20/20 [00:13<00:00,  1.48it/s]
+Epoch 1, train loss: 0.9954, test loss: 0.6591, accuracy: 0.5952
+Epoch 6, train loss: 0.5434, test loss: 0.6791, accuracy: 0.5476
+Epoch 11, train loss: 0.2833, test loss: 0.7590, accuracy: 0.5000
+Epoch 16, train loss: 0.1596, test loss: 0.9842, accuracy: 0.5000
+True
+False
+100%|██████████| 50/50 [00:34<00:00,  1.44it/s]
+Epoch 1, train loss: 0.6377, test loss: 0.6631, accuracy: 0.5714
+Epoch 6, train loss: 0.3248, test loss: 0.6722, accuracy: 0.5714
+Epoch 11, train loss: 0.1506, test loss: 0.9129, accuracy: 0.5000
+Epoch 16, train loss: 0.0897, test loss: 1.1779, accuracy: 0.5000
+Epoch 21, train loss: 0.0485, test loss: 1.5260, accuracy: 0.5000
+Epoch 26, train loss: 0.0335, test loss: 1.6435, accuracy: 0.4762
+Epoch 31, train loss: 0.0466, test loss: 1.6851, accuracy: 0.4524
+Epoch 36, train loss: 0.0784, test loss: 1.0626, accuracy: 0.6429
+Epoch 41, train loss: 0.0366, test loss: 0.8825, accuracy: 0.5952
+Epoch 46, train loss: 0.0166, test loss: 1.4620, accuracy: 0.5238
+True
+False
+100%|██████████| 30/30 [00:19<00:00,  1.56it/s]
+Epoch 1, train loss: 0.9041, test loss: 0.8999, accuracy: 0.2857
+Epoch 6, train loss: 0.4915, test loss: 1.1052, accuracy: 0.5000
+Epoch 11, train loss: 0.2796, test loss: 1.2713, accuracy: 0.5000
+Epoch 16, train loss: 0.1543, test loss: 0.9484, accuracy: 0.3810
+Epoch 21, train loss: 0.0960, test loss: 1.0379, accuracy: 0.5000
+Epoch 26, train loss: 0.0630, test loss: 1.3313, accuracy: 0.5000
+True
+False
+100%|██████████| 3/3 [00:02<00:00,  1.12it/s]
+Epoch 1, train loss: 0.9626, test loss: 1.4868, accuracy: 0.5000

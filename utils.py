@@ -6,6 +6,14 @@ from torchvision import models
 from tqdm import tqdm
 
 
+def compute_grad_norm(model: nn.Module) -> float:
+    total_norm = 0.0
+    for param in model.parameters():
+        if param.grad is not None:
+            total_norm += param.grad.data.norm(2).item() ** 2
+    return total_norm**0.5
+
+
 def precompute_features(
     model: models.ResNet, dataset: torch.utils.data.Dataset, device: torch.device
 ) -> torch.utils.data.Dataset:
@@ -38,6 +46,7 @@ def precompute_features(
     model.to(device)
 
     data, targets = next(iter(dataloader))
+    data, targets = data.to(device), targets.to(device)
     features = model(data)
 
     features_dataset = TensorDataset(
@@ -47,27 +56,22 @@ def precompute_features(
     return features_dataset
 
 
-# TODO: Fix
-class LastLayer(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.linear = nn.Linear(512, 2)
-
-    def forward(self, x):
-        return self.linear(x)
-
-
-def train(model, train_dataloader, test_dataloader, loss_fn, optimizer, n_epochs):
+def train(
+    model, train_dataloader, test_dataloader, loss_fn, optimizer, n_epochs, device
+):
     train_loss_history = []
     test_loss_history = []
     accuracy_history = []
 
+    model.to(device)
+
     for i in tqdm(range(n_epochs)):
         model.train()
-        train_loss = 0
-        test_loss = 0
-        correct = 0
+        train_loss = 0.0
+        test_loss = 0.0
+        correct = 0.0
         for features, targets in train_dataloader:
+            features, targets = features.to(device), targets.to(device)
             optimizer.zero_grad()
             y_pred = model(features)
             loss = loss_fn(y_pred, targets)
@@ -75,13 +79,16 @@ def train(model, train_dataloader, test_dataloader, loss_fn, optimizer, n_epochs
             train_loss += loss.item()
             optimizer.step()
 
+        train_loss /= len(train_dataloader)
+
         with torch.no_grad():
             model.eval()
             for features, targets in test_dataloader:
+                features, targets = features.to(device), targets.to(device)
                 y_pred = model(features)
                 loss = loss_fn(y_pred, targets)
                 test_loss += loss.item()
-                correct += (torch.argmax(y_pred, dim=1) == targets).sum()
+                correct += (torch.argmax(y_pred, dim=1) == targets).sum().item()
 
         accuracy = correct / len(test_dataloader.dataset)
 

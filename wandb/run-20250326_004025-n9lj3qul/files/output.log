@@ -1,0 +1,16 @@
+100%|██████████| 30/30 [00:17<00:00,  1.68it/s]
+Epoch 1, train loss: 0.9164, test loss: 0.8075, accuracy: 0.1905
+Epoch 6, train loss: 0.6099, test loss: 1.5402, accuracy: 0.5000
+Epoch 11, train loss: 0.4334, test loss: 1.4506, accuracy: 0.5000
+Epoch 16, train loss: 0.3114, test loss: 0.8364, accuracy: 0.4524
+Epoch 21, train loss: 0.2124, test loss: 0.9143, accuracy: 0.5000
+Epoch 26, train loss: 0.1661, test loss: 1.0593, accuracy: 0.5000
+True
+False
+/Users/matthieuneau/Library/Caches/pypoetry/virtualenvs/practice-labs-lU_vlk8p-py3.12/lib/python3.12/site-packages/torchvision/transforms/v2/_deprecated.py:42: UserWarning: The transform `ToTensor()` is deprecated and will be removed in a future release. Instead, please use `v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)])`.Output is equivalent up to float precision.
+  warnings.warn(
+100%|██████████| 20/20 [00:23<00:00,  1.16s/it]
+Epoch 1, train loss: 0.6007, test loss: 2.5783, accuracy: 0.5000
+Epoch 6, train loss: 0.5519, test loss: 1.0029, accuracy: 0.5000
+Epoch 11, train loss: 0.5679, test loss: 0.8751, accuracy: 0.5000
+Epoch 16, train loss: 0.5944, test loss: 0.7588, accuracy: 0.5238

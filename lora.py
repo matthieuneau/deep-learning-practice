@@ -1,7 +1,9 @@
-# for now, only handle 3x3 conv with padding=stride=1
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+
+import wandb
+from utils import compute_grad_norm
 
 
 class ConvLora(nn.Module):
@@ -51,31 +53,47 @@ def train_lora(
     loss_fn,
     optimizer,
     n_epochs,
+    device,
 ):
+    wandb.init(project="lora")
+
     train_loss_history = []
     test_loss_history = []
     accuracy_history = []
 
+    pretrained_model.to(device)
+    lora_model.to(device)
+
     for i in tqdm(range(n_epochs)):
         lora_model.train()
-        train_loss = 0
-        test_loss = 0
-        correct = 0
+        train_loss = 0.0
+        test_loss = 0.0
+        correct = 0.0
         for features, targets in train_dataloader:
+            features, targets = features.to(device), targets.to(device)
             optimizer.zero_grad()
             y_pred = lora_model(features) + pretrained_model(features)
             loss = loss_fn(y_pred, targets)
             loss.backward()
+
+            # Clipping gradients because their monitoring showed huge spikes
+            torch.nn.utils.clip_grad_norm_(lora_model.parameters(), max_norm=5.0)
             train_loss += loss.item()
             optimizer.step()
+        train_loss /= len(train_dataloader)
+
+        wandb.log({"grad_norm": compute_grad_norm(lora_model)})
 
         with torch.no_grad():
             lora_model.eval()
+            pretrained_model.eval()
             for features, targets in test_dataloader:
+                features, targets = features.to(device), targets.to(device)
                 y_pred = lora_model(features) + pretrained_model(features)
                 loss = loss_fn(y_pred, targets)
                 test_loss += loss.item()
-                correct += (torch.argmax(y_pred, dim=1) == targets).sum()
+                correct += (torch.argmax(y_pred, dim=1) == targets).sum().item()
+            test_loss /= len(test_dataloader)
 
         accuracy = correct / len(test_dataloader.dataset)
 
@@ -83,11 +101,20 @@ def train_lora(
         test_loss_history.append(test_loss)
         accuracy_history.append(accuracy)
 
-        if i % 2 == 0:
+        wandb.log(
+            {
+                "train_loss": train_loss,
+                "test_loss": test_loss,
+                "accuracy": accuracy,
+            }
+        )
+
+        if i % 5 == 0:
             print(
                 f"Epoch {i + 1}, train loss: {train_loss:.4f}, test loss: {test_loss:.4f}, accuracy: {accuracy:.4f}"
             )
 
+    wandb.Settings(quiet=True)
     return train_loss_history, test_loss_history, accuracy_history
 
 
@@ -144,10 +171,12 @@ def inflate_lora(lora_resnet):
             inflate_lora(child)
 
 
-def merge_models(resnet1, resnet2):
+def merge_models(resnet1, resnet2, device):
     """resnet1 += resnet2"""
+    resnet1.to(device)
+    resnet2.to(device)
     for child1, child2 in zip(resnet1.children(), resnet2.children()):
         if isinstance(child1, nn.Conv2d):
             child1.weight.data += child2.weight.data.clone()
         else:
-            merge_models(child1, child2)
+            merge_models(child1, child2, device)

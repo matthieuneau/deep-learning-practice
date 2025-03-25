@@ -1,0 +1,24 @@
+{"time":"2025-03-26T00:18:19.819309+01:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"/Users/matthieuneau/Desktop/Centrale/DLP/practice-labs/wandb/run-20250326_001819-2f7jop3m/logs/debug-core.log"}
+{"time":"2025-03-26T00:18:20.130328+01:00","level":"INFO","msg":"created new stream","id":"2f7jop3m"}
+{"time":"2025-03-26T00:18:20.130383+01:00","level":"INFO","msg":"stream: started","id":"2f7jop3m"}
+{"time":"2025-03-26T00:18:20.130402+01:00","level":"INFO","msg":"handler: started","stream_id":"2f7jop3m"}
+{"time":"2025-03-26T00:18:20.130489+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"2f7jop3m"}
+{"time":"2025-03-26T00:18:20.130516+01:00","level":"INFO","msg":"sender: started","stream_id":"2f7jop3m"}
+{"time":"2025-03-26T00:18:20.534192+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-26T00:18:35.179122+01:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2025-03-26T00:20:14.299168+01:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2025-03-26T00:20:28.072943+01:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2025-03-26T00:21:56.712479+01:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2025-03-26T00:22:31.670877+01:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2025-03-26T00:23:05.566591+01:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2025-03-26T00:23:25.490078+01:00","level":"INFO","msg":"Pausing system monitor"}
+{"time":"2025-03-26T00:24:17.357756+01:00","level":"INFO","msg":"Resuming system monitor"}
+{"time":"2025-03-26T00:24:20.200124+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-26T00:24:20.202127+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-26T00:24:20.902233+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-26T00:24:21.099767+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-03-26T00:24:21.129084+01:00","level":"INFO","msg":"stream: closing","id":"2f7jop3m"}
+{"time":"2025-03-26T00:24:21.129197+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"2f7jop3m"}
+{"time":"2025-03-26T00:24:21.129303+01:00","level":"INFO","msg":"sender: closed","stream_id":"2f7jop3m"}
+{"time":"2025-03-26T00:24:21.129343+01:00","level":"INFO","msg":"handler: closed","stream_id":"2f7jop3m"}
+{"time":"2025-03-26T00:24:21.130997+01:00","level":"INFO","msg":"stream: closed","id":"2f7jop3m"}
