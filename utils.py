@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision import models
 from tqdm import tqdm
 
+import wandb
+
 
 def compute_grad_norm(model: nn.Module) -> float:
     total_norm = 0.0
